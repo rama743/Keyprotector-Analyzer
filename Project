@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CyberShield - Advanced Password Strength Checker</title>
+
+<style>
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', sans-serif;
+        background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+        color: white;
+        overflow-x: hidden;
+    }
+
+    header {
+        text-align: center;
+        padding: 40px 20px;
+    }
+
+    header h1 {
+        font-size: 3em;
+        color: #00f2ff;
+        text-shadow: 0 0 15px #00f2ff;
+    }
+
+    .container {
+        max-width: 600px;
+        margin: auto;
+        background: rgba(0,0,0,0.7);
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 0 20px #00f2ff;
+    }
+
+    input {
+        width: 100%;
+        padding: 15px;
+        margin-top: 15px;
+        border-radius: 10px;
+        border: none;
+        font-size: 1.1em;
+    }
+
+    .strength-bar {
+        height: 15px;
+        margin-top: 15px;
+        border-radius: 10px;
+        background: #444;
+        overflow: hidden;
+    }
+
+    .strength-fill {
+        height: 100%;
+        width: 0%;
+        transition: 0.5s;
+    }
+
+    .feedback {
+        margin-top: 15px;
+        font-size: 0.95em;
+    }
+
+    .info-section {
+        margin-top: 50px;
+        padding: 40px;
+        background: #111;
+    }
+
+    .info-section h2 {
+        color: #00f2ff;
+    }
+
+    footer {
+        text-align: center;
+        padding: 20px;
+        background: #000;
+        font-size: 0.8em;
+    }
+
+    .glow {
+        animation: glow 1.5s infinite alternate;
+    }
+
+    @keyframes glow {
+        from { text-shadow: 0 0 5px #00f2ff; }
+        to { text-shadow: 0 0 20px #00f2ff; }
+    }
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1 class="glow">🔐Keyprotector Analyzer</h1>
+    <p>Test your password security against cyber threats</p>
+</header>
+
+<div class="container">
+    <label>Enter Your Password:</label>
+    <input type="password" id="password" placeholder="Type your password..." onkeyup="checkStrength()">
+
+    <div class="strength-bar">
+        <div class="strength-fill" id="strength-fill"></div>
+    </div>
+
+    <div class="feedback" id="feedback"></div>
+</div>
+
+<div class="info-section">
+    <h2>📚 About This Project</h2>
+    <p>
+        This Advanced Password Strength Checker analyzes password complexity using:
+    </p>
+    <ul>
+        <li>✔ Length evaluation</li>
+        <li>✔ Uppercase & Lowercase detection</li>
+        <li>✔ Numbers & Special characters</li>
+        <li>✔ Pattern detection</li>
+        <li>✔ Entropy-based strength estimation</li>
+    </ul>
+
+    <h2>🛡 Why Password Strength Matters?</h2>
+    <p>
+        Weak passwords are vulnerable to brute-force and dictionary attacks. 
+        Strong passwords increase entropy and make cracking computationally expensive.
+    </p>
+
+    <h2>🔎 Cyber Security Concepts Used</h2>
+    <ul>
+        <li>🔹 Entropy Calculation</li>
+        <li>🔹 Brute Force Resistance</li>
+        <li>🔹 Pattern Recognition</li>
+        <li>🔹 Secure Authentication Principles</li>
+    </ul>
+</div>
+
+<footer>
+    CyberShield Project | Cyber Security Mini Project 2026
+</footer>
+
+<script>
+function checkStrength() {
+    const password = document.getElementById("password").value;
+    const fill = document.getElementById("strength-fill");
+    const feedback = document.getElementById("feedback");
+
+    let score = 0;
+    let feedbackText = "";
+
+    if(password.length >= 8) score += 1;
+    if(password.length >= 12) score += 1;
+    if(/[A-Z]/.test(password)) score += 1;
+    if(/[a-z]/.test(password)) score += 1;
+    if(/[0-9]/.test(password)) score += 1;
+    if(/[^A-Za-z0-9]/.test(password)) score += 1;
+    if(!/(.)\1\1/.test(password)) score += 1; // no triple repeating chars
+
+    let entropy = password.length * Math.log2(94);
+    score += Math.min(Math.floor(entropy / 28), 3);
+
+    let strength = "";
+    let color = "";
+
+    if(score <= 3){
+        strength = "Very Weak ⚠";
+        color = "red";
+        fill.style.width = "25%";
+    }
+    else if(score <= 6){
+        strength = "Moderate ⚡";
+        color = "orange";
+        fill.style.width = "50%";
+    }
+    else if(score <= 9){
+        strength = "Strong 💪";
+        color = "yellow";
+        fill.style.width = "75%";
+    }
+    else{
+        strength = "Very Strong 🔥";
+        color = "lime";
+        fill.style.width = "100%";
+    }
+
+    fill.style.background = color;
+
+    feedbackText = `
+        Strength: <b style="color:${color}">${strength}</b><br>
+        Length: ${password.length} characters<br>
+        Estimated Entropy: ${entropy.toFixed(2)} bits
+    `;
+
+    feedback.innerHTML = feedbackText;
+}
+</script>
+
+</body>
+</html>
